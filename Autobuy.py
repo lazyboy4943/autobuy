@@ -1,17 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
-from twilio.rest import Client
 import smtplib 
 import time
 
 
 
 
-url = 'https://www.courts.com.sg/apple-mhqr3zp-a-space-grey-11-inch-ipad-pro-wi-fi-128gb-ip167740'
+url = 'https://www.courts.com.sg/sony-cfi-1018a01-playstation-5-ip162581'
 html_text = requests.get(url).text
 soup = BeautifulSoup(html_text, 'html.parser')
 
-#soup is not the html of the website
+#soup is the html of the website
 
 #getstatus returns a string: "Add to Cart" or "Out of Stock"
 #depending on the status of the item from the url
@@ -38,7 +37,6 @@ def getstatus():
 
     return(status)
 
-print(getstatus())
 
 
 
@@ -52,8 +50,8 @@ def sendmessage():
         smtp.login('ispsinstock@gmail.com', 'ispsinstock123')
 
 
-        subject = 'In Stock!!!! (Test)'
-        body = 'Buy the Playstation NOW!!!'
+        subject = 'PS5 In Stock!!!!'
+        body = f'Buy the Playstation NOW!!!, it is currently in stock at: \n \n https://www.courts.com.sg/sony-cfi-1018a01-playstation-5-ip162581'
 
         msg = f'Subject: {subject}\n\n{body}'
 
@@ -61,6 +59,11 @@ def sendmessage():
 
 
 while True:
+    print('Processing...')
     if getstatus() == 'Add to Cart':
+        print('In Stock. Sending Email...')
         sendmessage()
+        time.sleep(10)
+    else:
+        print('Not in stock. Trying again...')
         time.sleep(10)
