@@ -40,7 +40,55 @@ def getstatus():
 
 
 
-def sendmessage():
+
+urlsony = 'https://store.sony.com.sg/collections/playstation-consoles/products/playstation%C2%AE5-and-dualsense%E2%84%A25-wireless-controller-bundle'
+html_textsony = requests.get(urlsony).text
+soupsony = BeautifulSoup(html_textsony, 'html.parser')
+
+def getstatussony():
+    #addtocartsony = soupsony.find(id = 'product-addtocart-button')
+
+    #line below this is for debug purposes
+    #print(addtocart)
+    #addtocart is the bs4 data that is the code of the submit button
+    #check the span of this code to see if it says out of stock or add to cart
+
+    statustagsony = soupsony.find('div', class_ = "product__payment-container")
+   
+    statussony = statustagsony
+    #statussony = str(statussony)
+    
+        
+    buttonsony = statussony.find('button')
+    return str(buttonsony)
+
+#getbuttonsony() returns the button tag of the ps5 from the sony website
+
+
+print(getstatussony())
+
+
+def sendmessagesony():
+
+
+
+    with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+
+        smtp.login('ispsinstock@gmail.com', 'ispsinstock123')
+
+
+        subject = 'PS5 In Stock at Sony!!!!'
+        body = f'Buy the Playstation NOW!!!, it is currently in stock at: \n \n https://store.sony.com.sg/collections/playstation-consoles/products/playstation%C2%AE5-and-dualsense%E2%84%A25-wireless-controller-bundle'
+
+        msg = f'Subject: {subject}\n\n{body}'
+
+        smtp.sendmail('ispsinstock@gmail.com', 'ispsinstock@gmail.com', msg)
+
+
+def sendmessagecourts():
     
     with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
         smtp.ehlo()
@@ -50,7 +98,7 @@ def sendmessage():
         smtp.login('ispsinstock@gmail.com', 'ispsinstock123')
 
 
-        subject = 'PS5 In Stock!!!!'
+        subject = 'PS5 In Stock At Courts!!!!'
         body = f'Buy the Playstation NOW!!!, it is currently in stock at: \n \n https://www.courts.com.sg/sony-cfi-1018a01-playstation-5-ip162581'
 
         msg = f'Subject: {subject}\n\n{body}'
@@ -61,9 +109,15 @@ def sendmessage():
 while True:
     print('Processing...')
     if getstatus() == 'Add to Cart':
-        print('In Stock. Sending Email...')
-        sendmessage()
-        time.sleep(10)
+        print('Courts In Stock. Sending Email...')
+        sendmessagecourts()
     else:
-        print('Not in stock. Trying again...')
-        time.sleep(10)
+        print('Courts Not in stock. Trying again...')
+
+    if getstatussony() == f'<button class="product__add-to-cart button button--primary" type="submit">Add to cart\n</button>':
+        print('Sony In Stock. Sending Email...')
+        sendmessagesony()
+    else:
+        print('Sony Not in stock. Trying again...')
+
+    time.sleep(60)
