@@ -12,5 +12,14 @@ addtocart = soup.find(id = 'product-addtocart-button')
 #addtocart is the bs4 data that is the code of the submit button
 #check the span of this code to see if it says out of stock or add to cart
 
-status = addtocart.find_all('span')
+statustag = addtocart.find_all('span')
+#print(statustag)
+#print(type(statustag))
+
+statusstr = str(statustag)
+#print(statusstr)
+#print(type(statusstr))
+
+status = statusstr[7:19]
+
 print(status)
