@@ -107,6 +107,7 @@ counter = 0
 while True:
     counter = counter + 1
     print(counter, 'Processing...')
+    time.sleep(7)
     if getstatus() == 'Add to Cart':
         print('Courts In Stock. Sending Email...')
         sendmessagecourts()
@@ -118,5 +119,5 @@ while True:
         sendmessagesony()
     else:
         print('Sony Not in stock. Trying again...')
-
-    time.sleep(10)
+    time.sleep(3)
+    
