@@ -35,7 +35,7 @@ def getstatus():
     if statusstr == "[<span>Out Of Stock</span>]":
         status = "Out Of Stock"
 
-    return(status)
+    return status
 
 
 
@@ -64,8 +64,6 @@ def getstatussony():
 
 #getbuttonsony() returns the button tag of the ps5 from the sony website
 
-
-print(getstatussony())
 
 
 def sendmessagesony():
@@ -105,9 +103,10 @@ def sendmessagecourts():
 
         smtp.sendmail('ispsinstock@gmail.com', 'ispsinstock@gmail.com', msg)
 
-
+counter = 0
 while True:
-    print('Processing...')
+    counter = counter + 1
+    print(counter, 'Processing...')
     if getstatus() == 'Add to Cart':
         print('Courts In Stock. Sending Email...')
         sendmessagecourts()
@@ -120,4 +119,4 @@ while True:
     else:
         print('Sony Not in stock. Trying again...')
 
-    time.sleep(60)
+    time.sleep(10)
